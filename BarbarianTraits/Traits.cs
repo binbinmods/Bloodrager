@@ -158,6 +158,9 @@ namespace Barbarian
             string enchantmentOfInterest;
             switch (_acId)
             {
+                // item barbarianslasher - +0.25 damage/stack vitality
+                // corrupted - +1 damage/stack vitality
+
                 // trait0:
                 // Fury and Sharp are half as effective at increasing your damage. 
                 // Bleed on you increases damage by 2%/charge 
@@ -188,6 +191,22 @@ namespace Barbarian
                     {
                         __result.MaxMadnessCharges += 100;
                     }
+                    string itemId = "barbarianslasher";
+                    if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId, AppliesTo.ThisHero)||
+                       IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"a", AppliesTo.ThisHero)||
+                       IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"b", AppliesTo.ThisHero)
+                    )
+                    {
+                        __result.AuraDamageType = Enums.DamageType.All;
+                        __result.AuraDamageIncreasedPerStack = 0.25f;
+                    }
+                    else if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"rare", AppliesTo.ThisHero)
+                    )
+                    {
+                        __result.AuraDamageType = Enums.DamageType.All;
+                        __result.AuraDamageIncreasedPerStack = 1;
+                    }
+
                     break;
 
                 case "fury":
@@ -292,6 +311,19 @@ namespace Barbarian
                 stringBuilder1.Insert(0, textToAdd);
             }
 
+            enchantId = "barbarianslasher";
+            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b" )
+            {
+                string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.25 per stack\n";
+                stringBuilder1.Insert(0, textToAdd);
+            }
+            else if (__instance.Id == enchantId+"rare")
+            {
+                string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 1 per stack\n";
+                stringBuilder1.Insert(0, textToAdd);
+            }
+
+
             BinbinNormalizeDescription(ref __instance, stringBuilder1);
         }   
 
@@ -313,7 +345,7 @@ namespace Barbarian
             // Hero[] teamHero = MatchManager.Instance.GetTeamHero();
             // NPC[] teamNpc = MatchManager.Instance.GetTeamNPC();
             // string eventString = Enum.GetName(typeof(Enums.EventActivation), theEvent);
-            LogDebug("SetEventPrefix");
+            // LogDebug("SetEventPrefix");
             string enchantId = "barbariantrait3b";
             if (theEvent == Enums.EventActivation.AuraCurseSet && IsLivingHero(target) && CharacterHaveEnchantment(target,enchantId) && auxString == "bleed")
             {
@@ -324,7 +356,7 @@ namespace Barbarian
                 bleedInfiniteProtection++;
                 if (bleedInfiniteProtection % 2 == 1 && bleedInfiniteProtection < 100)
                 {
-                    LogDebug("Handling ");
+                    LogDebug("Handling barbariantrait3b");
                     target.SetAura(__instance, GetAuraCurseData("bleed"), n, useCharacterMods: false);
                 }
 
