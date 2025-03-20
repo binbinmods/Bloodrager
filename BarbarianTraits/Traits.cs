@@ -317,9 +317,9 @@ namespace Barbarian
             string enchantId = "barbariantrait3b";
             if (theEvent == Enums.EventActivation.AuraCurseSet && IsLivingHero(target) && CharacterHaveEnchantment(target,enchantId) && auxString == "bleed")
             {
-                // trait3b: Bleed Received +3";
+                // trait3a: Bleed Received +3";
                 int n = 3;
-                
+
                 // needs to run every other time this is called
                 bleedInfiniteProtection++;
                 if (bleedInfiniteProtection % 2 == 1 && bleedInfiniteProtection < 100)
