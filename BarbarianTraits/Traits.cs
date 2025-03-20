@@ -282,13 +282,13 @@ namespace Barbarian
             string enchantId = "barbariantrait1a";
             if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
             {
-                string textToAdd = $"{SpriteText("bleed")} cannot be removed, prevented, or restricted in any way.";
+                string textToAdd = $"{SpriteText("bleed")}  cannot be removed, prevented, or restricted in any way\n";
                 stringBuilder1.Insert(0, textToAdd);
             }
             enchantId = "barbariantrait3b";
             if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
             {
-                string textToAdd = $"+3 {SpriteText("bleed")} received\n";
+                string textToAdd = $"{SpriteText("bleed")}  received +3\n";
                 stringBuilder1.Insert(0, textToAdd);
             }
 

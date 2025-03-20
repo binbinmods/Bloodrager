@@ -47,7 +47,7 @@ namespace Barbarian
                 _version: PluginInfo.PLUGIN_VERSION,
                 _date: ModDate,
                 _link: @"https://github.com/binbinmods/heronamesubclass",
-                _contentFolder: "Gork",
+                _contentFolder: "Barbarian",
                 _type: ["content", "hero", "trait"]
             );
             // apply patches
