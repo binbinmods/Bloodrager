@@ -1,8 +1,8 @@
 {
-    "name": "<Character>_The_<Subclass>",
-    "version_number": "1.0.0",
-    "website_url": "https://github.com/binbinmods/<githubrepo>",
-    "description": "New Hero Mod for <Character>, the <Subclass>, a <Description>.",
+    "name": "Gork_the_Barbarian",
+    "version_number": "0.1.0",
+    "website_url": "https://github.com/binbinmods/Bloodrager",
+    "description": "New Hero Mod for Gork, the Barbarian. A self-Bleeding, high Max HP damage dealer.",
     "dependencies": [
         "meds-Obeliskial_Content-1.5.0"
     ]

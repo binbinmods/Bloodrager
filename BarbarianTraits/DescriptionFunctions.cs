@@ -7,6 +7,7 @@ using static Obeliskial_Essentials.Essentials;
 using System;
 using static Barbarian.CustomFunctions;
 using static Barbarian.Plugin;
+using static Barbarian.Traits;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,6 +24,10 @@ namespace Barbarian
         // To create a patch, you need to declare either a prefix or a postfix. 
         // Prefixes are executed before the original code, postfixes are executed after
         // Then you need to tell Harmony which method to patch.
+        public static string itemStem = $"{subclassname}";
+        public static List<string> cardsWithCustomDescriptions = ["surprisebox", "surpriseboxrare", "surprisegiftbox", "surprisegiftboxrare", "bbbtreefellingaxe", "bbbtreefellingaxerare", "bbbcloakofthorns", "bbbcloakofthornsrare", "bbbportablewallofflames", "bbbportablewallofflamesrare", "bbbslimepoison", "bbbslimepoisonrare", "bbbscrollofpetimmortality", "bbbscrollofpetimmortalityrare", "rocketbootsrare"];
+        public static List<string> cardsToAppendDescription = ["bbbrustedshield", "bbbrustedshieldrare", "soullanternrare", "boneclawsrare", "mozzy","mozzyrare", "bbbmelancholicarmor", "bbbmelancholicarmorare"];
+        public static List<string> cardsToPrependDescription = ["mimy", "mimyrare"];        
 
         public static string NumFormatItem(int num, bool plus = false, bool percent = false)
         {
@@ -284,7 +289,7 @@ namespace Barbarian
 
         public static void AppendDescriptionsToCards(CardData __instance, ref StringBuilder stringBuilder1)
         {
-            if (BalancePatches.cardsToAppendDescription.Contains(__instance.Id))
+            if (cardsToAppendDescription.Contains(__instance.Id))
             {
                 LogDebug("Creating description for " + __instance.Id);
                 LogDebug($"Current description {__instance.Id}: {stringBuilder1}");
@@ -296,7 +301,7 @@ namespace Barbarian
 
         public static void PrependDescriptionsToCards(CardData __instance, ref StringBuilder stringBuilder1)
         {
-            if (BalancePatches.cardsToPrependDescription.Contains(__instance.Id))
+            if (cardsToPrependDescription.Contains(__instance.Id))
             {
                 LogDebug("Creating description for " + __instance.Id);
                 LogDebug($"Current description {__instance.Id}: {stringBuilder1}");

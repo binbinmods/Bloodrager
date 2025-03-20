@@ -24,8 +24,12 @@ namespace Barbarian
         public static ConfigEntry<bool> EnableDebugging { get; set; }
 
 
-        public static string characterName = "<HeroName>";
-        public static string subclassName = "<Subclass>"; // needs caps
+        public static string characterName = "Gork";
+        public static string heroName = characterName;
+
+        public static string subclassName = "Barbarian"; // needs caps
+
+        public static string subclassname = subclassName.ToLower();
         public static string debugBase = "Binbin - Testing " + characterName + " ";
 
         private void Awake()
@@ -39,11 +43,11 @@ namespace Barbarian
             RegisterMod(
                 _name: PluginInfo.PLUGIN_NAME,
                 _author: "binbin",
-                _description: "<Hero, The Subclass>.",
+                _description: "Gork, the Barbarian.",
                 _version: PluginInfo.PLUGIN_VERSION,
                 _date: ModDate,
                 _link: @"https://github.com/binbinmods/heronamesubclass",
-                _contentFolder: "<Hero>",
+                _contentFolder: "Gork",
                 _type: ["content", "hero", "trait"]
             );
             // apply patches

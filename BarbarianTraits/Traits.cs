@@ -6,6 +6,7 @@ using Obeliskial_Content;
 using UnityEngine;
 using static Barbarian.CustomFunctions;
 using static Barbarian.Plugin;
+using static Barbarian.DescriptionFunctions;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -15,9 +16,6 @@ namespace Barbarian
     internal class Traits
     {
         // list of your trait IDs
-        public static string heroName = "Gork";
-
-        public static string subclassname = "barbarian";
 
         public static string[] simpleTraitList = ["trait0", "trait1a", "trait1b", "trait2a", "trait2b", "trait3a", "trait3b", "trait4a", "trait4b"];
 
@@ -30,11 +28,8 @@ namespace Barbarian
         static string trait4a = myTraitList[7];
         static string trait4b = myTraitList[8];
 
-        public static bool isDamagePreviewActive = false;
-
-        public static bool isCalculateDamageActive = false;
         public static int infiniteProctection = 0;
-        public static int infiniteProctectionPowerful = 0;
+        public static int bleedInfiniteProtection = 0;
 
         public static string debugBase = "Binbin - Testing " + heroName + " ";
 
@@ -60,70 +55,61 @@ namespace Barbarian
             NPC[] teamNpc = MatchManager.Instance.GetTeamNPC();
 
             if (_trait == trait0)
-            { // TODO trait 0
+            { 
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
-                // Insane on you does not reduce damage, increases healing by 1% per charge, and stacks to 200.
-                // When you would overheal a character, apply Shield equal to 50% of the amount overhealed (Benefits 50% from Shield bonuses).
-                // Done in HealReceivedFinalPrefix and GACM
+                // trait0:
+                // Fury and Sharp are half as effective at increasing your damage. 
+                // Bleed on you increases damage by 3%/charge 
+                // Done in GACM
             }
 
 
             else if (_trait == trait2a)
             {
-                // Scourge on you increases Damage and Healing by 10% per charge and 
-                // increases Block and Shield charges applied by 1 per charge.
+                // Speed -2. All resistances -40%.  -- Done in JSON
+                // Double your current Max HP and your HP gained by Vitality. -- Done in AssignTraitPostfix
+                // At the start of combat, gain 2 vitality 
 
                 // Handled in GACM/GetTraitAuraCurseModifiers
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
 
-                // if (IsLivingHero(_character) && _target != null && _target.Alive)
-                // {
-                //     _character.SetAuraTrait(_character, "scourge", 2);
-                //     _target.SetAuraTrait(_character, "scourge", 2);
-                //     DisplayTraitScroll(ref _character, traitData);
-                // }
+                if (IsLivingHero(_character))
+                {
+                    _character.SetAuraTrait(_character, "vitality", 2);
+                }
 
             }
 
 
 
             else if (_trait == trait2b)
-            { // TODO trait 2b
+            { // trait 2b:  At the start of your turn, reduce the cost of your highest cost card by 4.
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
-                // At the start of your turn, reduce your highest cost card by 1 until discarded. Repeat for every 20 Insane on you.
-                if (!IsLivingHero(_character))// || _character.GetAuraCharges("insane") < 20)
+                if(IsLivingHero(_character))
                 {
-                    return;
-                }
-
-                int nInsane = _character.GetAuraCharges("insane");
-                int iterations = Mathf.FloorToInt(nInsane * 0.05f) + 1;
-                for (int i = 0; i < iterations; i++)
-                {
-                    CardData highestCostCard = GetRandomHighestCostCard(Enums.CardType.Spell, heroHand);
-                    ReduceCardCost(ref highestCostCard, _character, 1, isPermanent: false);
-                }
-
-                // Debating having it half your insane charges first.
-                _character.HealAuraCurse(GetAuraCurseData("insane"));
-                _character.SetAura(_character, GetAuraCurseData("insane"), Mathf.RoundToInt(nInsane * 0.5f), useCharacterMods: false, canBePreventable: false);
-
+                    CardData highestCostCard = GetRandomHighestCostCard(Enums.CardType.None, heroHand);
+                    ReduceCardCost(ref highestCostCard, _character, 4, isPermanent: false);
+                }                
             }
 
             else if (_trait == trait4a)
             {
-                // Scourge +2. Scourge on all characters can stack and only loses 50% of its charges when consumed.
-                // Done in GACM
+                // When you apply Vitality to another character, gain that much Vitality (unaffected by modifiers). 
+                // +100 Max Vitality charges for you.
 
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
+                if (IsLivingHero(_character) && _target.Alive && _target != null && _auxInt != 0 && _auxString == "vitality" && _target.SourceName != _character.SourceName)
+                {
+                    _character.SetAura(_character, GetAuraCurseData("vitality"), _auxInt, fromTrait:true, useCharacterMods: false);
+                }
 
             }
 
@@ -132,12 +118,9 @@ namespace Barbarian
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
-                // Insane on you increases mind damage by 3% per charge. When you play a card, suffer 3 Insane, this does not benefit from modifiers. (5x/turn).
-                if (CanIncrementTraitActivations(traitId))
-                {
-                    _character.SetAura(_character, GetAuraCurseData("insane"), 3, useCharacterMods: false);
-                    IncrementTraitActivations(traitId);
-                }
+                // Bleed +1 for every 2 Sharp on you. -- Done in GetTraitAuraCurseModifiersPostfix
+                // +200 Max Bleed charges for everyone. -- Done in GACM
+                
             }
 
         }
@@ -165,78 +148,63 @@ namespace Barbarian
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(AtOManager), "GlobalAuraCurseModificationByTraitsAndItems")]
+        [HarmonyPriority(Priority.Last)]
         public static void GlobalAuraCurseModificationByTraitsAndItemsPostfix(ref AtOManager __instance, ref AuraCurseData __result, string _type, string _acId, Character _characterCaster, Character _characterTarget)
         {
             LogInfo($"GACM {subclassName}");
 
             Character characterOfInterest = _type == "set" ? _characterTarget : _characterCaster;
             string traitOfInterest;
-
+            string enchantmentOfInterest;
             switch (_acId)
             {
-                // 0: Insane on you does not reduce damage, increases healing by 1% per charge, and stacks to 200
-                // item 1a: Scourge on this hero can stack and is lost at the end of turn.
-                // 2a: Scourge on this hero increases Damage and Healing by 10% per charge.
-                // item 3b: Crack reduces mind resistance by 1%/charge
-                // 4a: Scourge on all characters can stack. 
-                // 4a: Scourge loses half charges when consumed.
-                // 4b: Insane on this hero increases mind damage by 3% per charge.                
-                case "scourge":
-                    traitOfInterest = trait2a;
-                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                // trait0:
+                // Fury and Sharp are half as effective at increasing your damage. 
+                // Bleed on you increases damage by 2%/charge 
+
+                // enchantment1a: Bleed cannot be removed, prevented, or restricted
+
+                // 4a: +100 max vit on this hero
+                // 4b: +200 max bleed globally
+                case "bleed":
+                    enchantmentOfInterest = "barbariantrait1a";
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Enchantment, enchantmentOfInterest, AppliesTo.Global))
                     {
-                        __result.AuraDamageType2 = Enums.DamageType.All;
-                        __result.AuraDamageIncreasedPercentPerStack2 = 10.0f;
-                        __result.HealDonePercentPerStack = 10;
-
+                        __result.Preventable = false;
+                        __result.Removable = false;
+                        __result.MaxCharges = -1;
+                        __result.MaxMadnessCharges = -1;
                     }
-
-                    if (IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait1b", AppliesTo.ThisHero) ||
-                        IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait1ba", AppliesTo.ThisHero) ||
-                        IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait1bb", AppliesTo.ThisHero))
-                    {
-                        __result.GainCharges = true;
-                        __result.ConsumedAtTurn = true;
-                        __result.ConsumedAtTurnBegin = false;
-                    }
-
-                    traitOfInterest = trait4a;
+                    traitOfInterest = trait4b;
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.Global))
                     {
-                        __result.GainCharges = true;
-                        __result.AuraConsumed = 0;
-                        __result.ConsumeAll = false;
+                        __result.MaxMadnessCharges += 200;
                     }
+
                     break;
-
-                case "crack":
-                    // traitOfInterest = trait4b;
-                    if (IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait3b", AppliesTo.Monsters) ||
-                        IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait3ba", AppliesTo.Monsters) ||
-                        IfCharacterHas(characterOfInterest, CharacterHas.Item, "moontouchedtrait3bb", AppliesTo.Monsters))
-                    {
-                        __result = __instance.GlobalAuraCurseModifyResist(__result, Enums.DamageType.Mind, 0, -1.0f);
-                    }
-                    break;
-
-                case "insane":
-                    traitOfInterest = trait0;
-                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
-                    {
-                        // __result.AuraDamageType3 = Enums.DamageType.Mind;
-                        // __result.AuraDamageIncreasedPercentPerStack3 = 2.0f;
-                        __result.AuraDamageType = Enums.DamageType.None;
-                        __result.AuraDamageIncreasedPercentPerStack = 0;
-                        __result.HealDonePercentPerStack = 1;
-                        __result.MaxCharges = 200;
-                        __result.MaxMadnessCharges = 200;
-                    }
-
+                case "vitality":
                     traitOfInterest = trait4b;
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
                     {
-                        __result.AuraDamageType3 = Enums.DamageType.Mind;
-                        __result.AuraDamageIncreasedPercentPerStack3 = 3.0f;
+                        __result.MaxMadnessCharges += 100;
+                    }
+                    break;
+
+                case "fury":
+                    traitOfInterest = trait0;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                    {
+                        __result.AuraDamageIncreasedPercentPerStack *= 0.5f;
+                    }                    
+                    break;
+                case "sharp":
+                    traitOfInterest = trait0;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                    {
+                        __result.AuraDamageIncreasedPerStack *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack2 *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack3 *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack4 *= 0.5f;                        
                     }
                     break;
             }
@@ -244,93 +212,24 @@ namespace Barbarian
 
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(Character), nameof(Character.HealReceivedFinal))]
-        public static void HealReceivedFinalPostfix(Character __instance, int __result, int heal, bool isIndirect = false)
+        [HarmonyPatch(typeof(Hero), nameof(Hero.AssignTrait))]
+        public static void AssignTraitPostfix(
+            ref Hero __instance,
+            bool __result,
+            string traitName)
         {
-            LogDebug("HealReceivedFinalPostfix");
-            if (infiniteProctection > 100)
-                return;
-            if (isDamagePreviewActive || isCalculateDamageActive)
-                return;
-            if (MatchManager.Instance == null)
-                return;
-            if (!IsLivingHero(__instance) || MatchManager.Instance.GetHeroHeroActive() == null)
-                return;
-
-            infiniteProctection++;
-
-            // MatchManager.Instance.cast
-            Hero activeHero = MatchManager.Instance.GetHeroHeroActive();
-            LogDebug("Inf " + infiniteProctection);
-            LogDebug("Active Hero: " + activeHero.SubclassName);
-            LogDebug("Targeted/Instanced Hero: " + __instance.SubclassName);
-            if (__result >= 0 && activeHero.HaveTrait(trait0) && IsLivingHero(__instance) && IsLivingHero(activeHero))
+            LogDebug("AssignTraitPostfix");
+            string traitOfInterest = trait2a;
+            if(__result && traitName == traitOfInterest)
             {
-                int amountOverhealed = __result - __instance.GetHpLeftForMax();
-                if (amountOverhealed <= 0) { return; }
-                int amountToShield = Mathf.RoundToInt((amountOverhealed + activeHero.AuraCurseModification["shield"]) * 0.5f);
-                __instance.SetAura(activeHero, GetAuraCurseData("shield"), amountToShield, useCharacterMods: false);
+                LogDebug("AssignTraitPostfix - Doubling Max HP");
+                int toAdd = __instance.GetMaxHP();
+                __instance.ModifyMaxHP(toAdd);
             }
-        }
-
-       
-
-
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Character), "EndTurn")]
-        public static void EndTurnPostfix(
-            ref Character __instance,
-            int __state)
-        {
-            
            
         }
 
 
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(Character), "BeginTurn")]
-        public static void BeginTurnPostFix2(
-            ref Character __instance,
-            int __state)
-        {
-            // string whenToConsume = "EndTurn";
-            // Character character = __instance;
-            // LogDebug($"BeginTurnPostfix - Applying {__state} Scourge");
-            // if (__state > 0 && character != null && character.Alive)
-            // {            
-            //     // Globals.Instance.WaitForSeconds(1.5f);
-            //     character.SetAura(character, GetAuraCurseData("scourge"), __state, useCharacterMods: false, canBePreventable: false);
-            //     LogDebug($"BeginTurnPostfix - Applied {__state} Scourge");
-            // }
-            AuraCurseData scourge = GetAuraCurseData("scourge");
-            bool hasWaning = IsLivingHero(__instance) && (AtOManager.Instance.CharacterHaveItem(__instance.SubclassName,"moontouchedtrait1b") ||AtOManager.Instance.CharacterHaveItem(__instance.SubclassName,"moontouchedtrait1ba") ||AtOManager.Instance.CharacterHaveItem(__instance.SubclassName,"moontouchedtrait1bb") );
-            if (!hasWaning && __instance != null && __instance.Alive && __instance.GetAuraCharges("scourge") > 0)
-            {
-                int nToApply = Mathf.RoundToInt(__instance.GetAuraCharges("scourge") * 0.5f);
-                LogDebug($"BeginTurnPostfix - Character {__instance.SourceName} Has {Mathf.RoundToInt(__instance.GetAuraCharges("scourge"))} Scourge, Applying {nToApply} Scourge");
-                __instance.HealAuraCurse(scourge);
-                __instance.SetAura(__instance, scourge, nToApply, useCharacterMods: false, canBePreventable: false);
-            }
-        }
-
-
-
-
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(MatchManager), nameof(MatchManager.SetDamagePreview))]
-        public static void SetDamagePreviewPrefix()
-        {
-            isDamagePreviewActive = true;
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(MatchManager), nameof(MatchManager.SetDamagePreview))]
-        public static void SetDamagePreviewPostfix()
-        {
-            isDamagePreviewActive = false;
-        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), nameof(Character.BeginTurn))]
@@ -345,30 +244,24 @@ namespace Barbarian
         public static void GetTraitAuraCurseModifiersPostfix(ref Character __instance, ref Dictionary<string, int> __result)
         {
             LogDebug("GetTraitAuraCurseModifiersPostfix");
-            string traitOfInterest = trait4a;
+            string traitOfInterest = trait4b;
             if (!IsLivingHero(__instance) || !__instance.HaveTrait(traitOfInterest))
             {
                 return;
             }
 
             // int nInsane = __instance.GetAuraCharges("insane");
-            int nToIncrease = __instance.GetAuraCharges("insane");
+            int nToIncrease = Mathf.RoundToInt(__instance.GetAuraCharges("sharp") * 0.5f);
             // int nToIncrease = Mathf.FloorToInt(nInsane * 0.1f);
             if (nToIncrease <= 0)
             {
                 return;
             }
-            if (!__result.ContainsKey("shield"))
+            if (!__result.ContainsKey("bleed"))
             {
-                __result["shield"] = 0;
+                __result["bleed"] = 0;
             }
-            __result["shield"] += nToIncrease;
-
-            if (!__result.ContainsKey("block"))
-            {
-                __result["block"] = 0;
-            }
-            __result["block"] += nToIncrease;
+            __result["bleed"] += nToIncrease;
         }
 
         [HarmonyPostfix]
@@ -386,94 +279,58 @@ namespace Barbarian
             StringBuilder stringBuilder1 = new StringBuilder();
             string currentDescription = Globals.Instance.CardsDescriptionNormalized[__instance.Id];
             stringBuilder1.Append(currentDescription);
-
-            if (__instance.Id == "moontouchedtrait1b" || __instance.Id == "moontouchedtrait1ba" || __instance.Id == "moontouchedtrait1bb")
+            string enchantId = "barbariantrait1a";
+            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
             {
-                string waningMoonText = $"{SpriteText("scourge")} on this hero stacks and is lost at the end of turn\n";
-                stringBuilder1.Insert(0, waningMoonText);
+                string textToAdd = $"{SpriteText("bleed")} cannot be removed, prevented, or restricted in any way.";
+                stringBuilder1.Insert(0, textToAdd);
             }
-
-            if (__instance.Id == "moontouchedtrait3b" || __instance.Id == "moontouchedtrait3ba" || __instance.Id == "moontouchedtrait3bb")
+            enchantId = "barbariantrait3b";
+            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
             {
-                string crackHeadsText = $"{SpriteText("crack")} on enemies reduces {SpriteText("mind")} resistance by 1% per charge\n";
-                stringBuilder1.Insert(0, crackHeadsText);
+                string textToAdd = $"+3 {SpriteText("bleed")} received\n";
+                stringBuilder1.Insert(0, textToAdd);
             }
-
-            // if (__instance.Id == "flashheal" || __instance.Id == "flashheala" || __instance.Id == "flashhealb")
-            // {
-            //     string textToAdd = $"Testing\n";
-            //     stringBuilder1.Insert(0, textToAdd);
-            // }
 
             BinbinNormalizeDescription(ref __instance, stringBuilder1);
-        }
+        }   
 
-        public static void BinbinNormalizeDescription(ref CardData __instance, StringBuilder stringBuilder)
-        {
-            stringBuilder.Replace("<c>", "<color=#5E3016>");
-            stringBuilder.Replace("</c>", "</color>");
-            stringBuilder.Replace("<nb>", "<nobr>");
-            stringBuilder.Replace("</nb>", "</nobr>");
-            stringBuilder.Replace("<br1>", "<br><line-height=15%><br></line-height>");
-            stringBuilder.Replace("<br2>", "<br><line-height=30%><br></line-height>");
-            stringBuilder.Replace("<br3>", "<br><line-height=50%><br></line-height>");
-            string descriptionNormalized = stringBuilder.ToString();
-            descriptionNormalized = Regex.Replace(descriptionNormalized, "[,][ ]*(<(.*?)>)*(.)", (MatchEvaluator)(m => m.ToString().ToLower()));
-            descriptionNormalized = Regex.Replace(descriptionNormalized, "<br>\\w", (MatchEvaluator)(m => m.ToString().ToUpper()));
-            Globals.Instance.CardsDescriptionNormalized[__instance.Id] = stringBuilder.ToString();
-            __instance.DescriptionNormalized = descriptionNormalized;
-            Traverse.Create(__instance).Field("description").SetValue(descriptionNormalized);
-            Traverse.Create(__instance).Field("descriptionNormalized").SetValue(descriptionNormalized);
-        }
 
-        public static string SpriteText(string sprite)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Character), nameof(Character.SetEvent))]
+        public static void SetEventPrefix(ref Character __instance,
+                                            Enums.EventActivation theEvent,
+                                            ref int auxInt,
+                                            Character target = null,
+                                            string auxString = "")
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            string text = sprite.ToLower().Replace(" ", "");
-            switch (text)
+
+            if (theEvent == Enums.EventActivation.CharacterAssign || theEvent == Enums.EventActivation.DestroyItem || __instance == null || theEvent == Enums.EventActivation.None)
             {
-                case "block":
-                case "card":
-                    stringBuilder.Append("<space=.2>");
-                    break;
-                case "piercing":
-                    stringBuilder.Append("<space=.4>");
-                    break;
-                case "bleed":
-                    stringBuilder.Append("<space=.1>");
-                    break;
-                case "bless":
-                    stringBuilder.Append("<space=.1>");
-                    break;
-                default:
-                    stringBuilder.Append("<space=.3>");
-                    break;
+                return;
             }
-            stringBuilder.Append(" <space=-.2>");
-            stringBuilder.Append("<size=+.1><sprite name=");
-            stringBuilder.Append(text);
-            stringBuilder.Append("></size>");
-            switch (text)
+
+            // Hero[] teamHero = MatchManager.Instance.GetTeamHero();
+            // NPC[] teamNpc = MatchManager.Instance.GetTeamNPC();
+            // string eventString = Enum.GetName(typeof(Enums.EventActivation), theEvent);
+            LogDebug("SetEventPrefix");
+            string enchantId = "barbariantrait3b";
+            if (theEvent == Enums.EventActivation.AuraCurseSet && IsLivingHero(target) && CharacterHaveEnchantment(target,enchantId) && auxString == "bleed")
             {
-                case "bleed":
-                    stringBuilder.Append("<space=-.4>");
-                    break;
-                case "card":
-                    stringBuilder.Append("<space=-.2>");
-                    break;
-                case "powerful":
-                case "fury":
-                    stringBuilder.Append("<space=-.1>");
-                    break;
-                default:
-                    stringBuilder.Append("<space=-.2>");
-                    break;
-                case "reinforce":
-                case "fire":
-                    break;
+                // trait3b: Bleed Received +3";
+                int n = 3;
+                
+                // needs to run every other time this is called
+                bleedInfiniteProtection++;
+                if (bleedInfiniteProtection % 2 == 1 && bleedInfiniteProtection < 100)
+                {
+                    LogDebug("Handling ");
+                    target.SetAura(__instance, GetAuraCurseData("bleed"), n, useCharacterMods: false);
+                }
+
             }
-            return stringBuilder.ToString();
-        }
+
+        }             
 
     }
 }

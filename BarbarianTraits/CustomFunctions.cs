@@ -22,7 +22,8 @@ namespace Barbarian
         /// <summary>
         /// This is used as the base when naming perks in a perk mod. Ignore if you aren't making a perk mod/using this syntax.
         /// </summary>
-        public static string perkBase = "<RenameThisForPerks>";
+        public static string perkBase = $"{subclassname}";
+        public static string itemStem = $"{subclassname}";
 
         /// <summary>
         /// Shortcut for Plugin.Log.LogDebug(debugBase). debugBase set in CustomFunctions
@@ -595,7 +596,8 @@ namespace Barbarian
         {
             Perk,
             Item,
-            Trait
+            Trait,
+            Enchantment
         }
 
         /// <summary>
@@ -673,6 +675,10 @@ namespace Barbarian
                     case CharacterHas.Trait:
                         hasX = AtOManager.Instance.CharacterHaveTrait(characterOfInterest.SubclassName, perkBase + id) || AtOManager.Instance.CharacterHaveTrait(characterOfInterest.SubclassName, id);
                         break;
+                    case CharacterHas.Enchantment:
+                        hasX = CharacterHaveEnchantment(characterOfInterest,id);
+                        break;
+
                 }
             }
             else
@@ -687,6 +693,14 @@ namespace Barbarian
                         break;
                     case CharacterHas.Trait:
                         hasX = AtOManager.Instance.TeamHaveTrait(perkBase + id) || AtOManager.Instance.TeamHaveTrait(id);
+                        break;
+                    case CharacterHas.Enchantment:
+                        hasX = AtOManager.Instance.TeamHaveItem(itemStem + id) ||
+                               AtOManager.Instance.TeamHaveItem(itemStem + id + "a") ||
+                               AtOManager.Instance.TeamHaveItem(itemStem + id + "b") ||
+                               AtOManager.Instance.TeamHaveItem(id) ||
+                               AtOManager.Instance.TeamHaveItem(id + "a") ||
+                               AtOManager.Instance.TeamHaveItem(id + "b");
                         break;
                 }
             }
@@ -1442,6 +1456,65 @@ namespace Barbarian
         {
             // MatchManager.Instance.GetCardData(heroHand.Last());
             return MatchManager.Instance.GetCardData(heroHand.Last());
+        }
+
+        /// <summary>
+        /// Checks to see if a character has an enchantment
+        /// </summary>
+        /// <param name="character">character you are checking</param>
+        /// <param name="id">id of the enchantment</param>
+        /// <returns></returns>
+        public static bool CharacterHaveEnchantment(Character character, string id)
+        {
+            if(AtOManager.Instance == null)
+            {
+                return false;
+            }
+
+            string characterId = character.SubclassName;
+            return CharacterHaveEnchantment(characterId, id);
+        }
+
+        /// <summary>
+        /// Checks to see if a character has an enchantment
+        /// </summary>
+        /// <param name="characterId">character you are checking</param>
+        /// <param name="id">id of the enchantment</param>
+        /// <returns></returns>
+        public static bool CharacterHaveEnchantment(string characterId, string id)
+        {
+            if(AtOManager.Instance == null)
+            {
+                return false;
+            }
+
+            return AtOManager.Instance.CharacterHaveItem(characterId,  itemStem + id) ||
+                    AtOManager.Instance.CharacterHaveItem(characterId,  itemStem + id + "a") ||
+                    AtOManager.Instance.CharacterHaveItem(characterId,  itemStem + id + "b") ||
+                    AtOManager.Instance.CharacterHaveItem(characterId,  id) ||
+                    AtOManager.Instance.CharacterHaveItem(characterId,  id + "a") ||
+                    AtOManager.Instance.CharacterHaveItem(characterId,  id + "b");
+        }
+
+
+        /// <summary>
+        /// Checks to see if the team has a particular enchantment
+        /// </summary>
+        /// <param name="id">Enchantment to check</param>
+        /// <returns></returns>
+        public static bool TeamHaveEnchantment(string id)
+        {
+            if(AtOManager.Instance == null)
+            {
+                return false;
+            }
+
+            return AtOManager.Instance.TeamHaveItem(itemStem + id) ||
+                   AtOManager.Instance.TeamHaveItem(itemStem + id + "a") ||
+                   AtOManager.Instance.TeamHaveItem(itemStem + id + "b") ||
+                   AtOManager.Instance.TeamHaveItem(id) ||
+                   AtOManager.Instance.TeamHaveItem(id + "a") ||
+                   AtOManager.Instance.TeamHaveItem(id + "b");
         }
 
     }

@@ -23,7 +23,7 @@
     "DamageBonusPercentValue": 0.0,
     "DamageBonusPercentValue2": 0.0,
     "DamageBonusPercentValue3": 0.0,
-    "Description": "Fury and Sharp are half as effective at increasing your damage. Bleed on you increases damage by 3%/charge ",
+    "Description": "Fury and Sharp are half as effective at increasing your damage. Bleed on you increases damage by 2%/charge.",
     "HealFlatBonus": 0,
     "HealPercentBonus": 0.0,
     "HealReceivedFlatBonus": 0,
