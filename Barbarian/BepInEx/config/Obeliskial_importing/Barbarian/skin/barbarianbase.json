@@ -1,0 +1,15 @@
+{
+    "BaseSkin": true,
+    "PerkLevel": 0,
+    "SkinGO": "skingork",
+    "SkinID": "barbarianbase",
+    "SkinName": "Default",
+    "SkinOrder": 0,
+    "SkinSubclass": "barbarian",
+    "Sku": "",
+    "SpritePortrait": "gorkPortrait",
+    "SpritePortraitGrande": "gorkPortraitGrande",
+    "SpriteSilueta": "gorkSilueta",
+    "SpriteSiluetaGrande": "gorkSiluetaGrande",
+    "SteamStat": ""
+}

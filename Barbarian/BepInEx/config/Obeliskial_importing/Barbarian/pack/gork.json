@@ -1,0 +1,15 @@
+{
+    "Card0": "barbarianchainsaw",
+    "Card1": "recklesscharge",
+    "Card2": "bloodforblood",
+    "Card3": "invigoratingblow",
+    "Card4": "barbarianrampart",
+    "Card5": "",
+    "CardSpecial0": "",
+    "CardSpecial1": "",
+    "PackClass": "warrior",
+    "PackID": "gork",
+    "PackName": "Gork",
+    "PerkList": [],
+    "RequiredClass": "barbarian"
+}

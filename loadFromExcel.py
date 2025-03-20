@@ -6,9 +6,9 @@ import numpy as np
 import ast
 
 # Set the directory where the Excel file is located
-excel_file_name = "Cain The Penitent.xlsx"
-config = "ThePenitentConfigs"
-
+excel_file_name = "Bloodrager.xlsx"
+config = "BarbarianConfigs"
+character_name = "Barbarian"
 
 # This sets up the names of the directories for later.
 script_dir = os.path.dirname(__file__)
@@ -22,7 +22,6 @@ sheet_list = ['BinbinSubclass', 'BinbinPack', 'BinbinGameObject', 'BinbinSkin', 
 # sheet_list = ['BinbinSubclass'] 
 sheet_map = {'BinbinSubclass':"subclass", 'BinbinPack':"pack", 'BinbinGameObject':"gameObject", 'BinbinSkin':"skin", 'BinbinCardback':"cardback"}
 
-character_name = "Cain"
 
 def parse_cell_value(value):
     '''

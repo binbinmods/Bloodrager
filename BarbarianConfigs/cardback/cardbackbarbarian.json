@@ -1,0 +1,15 @@
+{
+    "AdventureLevel": 0,
+    "BaseCardback": true,
+    "CardbackID": "cardbackbarbarian",
+    "CardbackName": "Default",
+    "CardbackOrder": 1000,
+    "CardbackSprite": "cardbackbarbarian",
+    "CardbackSubclass": "barbarian",
+    "Locked": false,
+    "ObeliskLevel": 0,
+    "RankLevel": 0,
+    "ShowIfLocked": false,
+    "Sku": "",
+    "SteamStat": ""
+}
