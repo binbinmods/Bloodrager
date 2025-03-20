@@ -170,6 +170,13 @@ namespace Barbarian
                 // 4a: +100 max vit on this hero
                 // 4b: +200 max bleed globally
                 case "bleed":
+                    traitOfInterest = trait0;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                    {
+                        __result.AuraDamageType = Enums.DamageType.All;
+                        __result.AuraDamageIncreasedPercent = 2;
+                    }
+
                     enchantmentOfInterest = "barbariantrait1a";
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Enchantment, enchantmentOfInterest, AppliesTo.Global))
                     {
@@ -363,6 +370,19 @@ namespace Barbarian
             }
 
         }             
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Character), "HealAuraCurse")]
+        public static bool HealAuraCursePrefix(ref Character __instance, AuraCurseData AC)
+        {
+            LogInfo($"HealAuraCursePrefix {subclassName}");
+            string enchantId = "barbariantrait1a";
+            if(IsLivingHero(__instance) && TeamHaveEnchantment(enchantId) && AC == GetAuraCurseData("bleed"))
+            {
+                return false;
+            }
+            return true;
+
+        }
 
     }
 }
