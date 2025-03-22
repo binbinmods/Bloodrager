@@ -198,6 +198,11 @@ namespace Barbarian
                     {
                         __result.MaxMadnessCharges += 100;
                     }
+                    traitOfInterest = trait2a;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                    {
+                        __result.CharacterStatModifiedValuePerStack *= 2;
+                    }
                     string itemId = "barbarianslasher";
                     if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId, AppliesTo.ThisHero)||
                        IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"a", AppliesTo.ThisHero)||
@@ -376,7 +381,7 @@ namespace Barbarian
         {
             LogInfo($"HealAuraCursePrefix {subclassName}");
             string enchantId = "barbariantrait1a";
-            if(IsLivingHero(__instance) && TeamHaveEnchantment(enchantId) && AC == GetAuraCurseData("bleed"))
+            if(TeamHaveEnchantment(enchantId) && AC == GetAuraCurseData("bleed"))
             {
                 return false;
             }
