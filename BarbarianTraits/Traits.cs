@@ -280,6 +280,8 @@ namespace Barbarian
             {
                 return;
             }
+            if (isDamagePreviewActive || isCalculateDamageActive)
+                return;
 
             // int nInsane = __instance.GetAuraCharges("insane");
             int nToIncrease = Mathf.RoundToInt(__instance.GetAuraCharges("sharp") * 0.5f);
@@ -292,7 +294,7 @@ namespace Barbarian
             {
                 __result["bleed"] = 0;
             }
-            __result["bleed"] += nToIncrease;
+            __result["bleed"] = nToIncrease;
         }
 
         [HarmonyPostfix]
@@ -387,6 +389,34 @@ namespace Barbarian
             }
             return true;
 
+        }
+
+        public static bool isDamagePreviewActive;
+        public static bool isCalculateDamageActive;
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(MatchManager), nameof(MatchManager.SetDamagePreview))]
+        public static void SetDamagePreviewPrefix()
+        {
+            isDamagePreviewActive = true;
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(MatchManager), nameof(MatchManager.SetDamagePreview))]
+        public static void SetDamagePreviewPostfix()
+        {
+            isDamagePreviewActive = false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(CharacterItem), nameof(CharacterItem.CalculateDamagePrePostForThisCharacter))]
+        public static void CalculateDamagePrePostForThisCharacterPrefix()
+        {
+            isCalculateDamageActive = true;
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(CharacterItem), nameof(CharacterItem.CalculateDamagePrePostForThisCharacter))]
+        public static void CalculateDamagePrePostForThisCharacterPostfix()
+        {
+            isCalculateDamageActive = false;
         }
 
     }
