@@ -191,6 +191,12 @@ namespace Barbarian
                         __result.MaxMadnessCharges += 200;
                     }
 
+                    traitOfInterest = trait4b;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.Monsters))
+                    {
+                        __result.DoubleDamageIfCursesLessThan = 100;
+                    }
+
                     break;
                 case "vitality":
                     traitOfInterest = trait4b;
