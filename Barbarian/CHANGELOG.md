@@ -1,3 +1,7 @@
+# 0.2.1
+
+Fixed issue with incorrect SubclassName causing issues
+
 # 0.2.0
 
 Initial pre-release for play testing

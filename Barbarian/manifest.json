@@ -1,8 +1,8 @@
 {
-    "name": "Gork_the_Barbarian",
-    "version_number": "0.2.0",
+    "name": "Gork_the_Greenskinned",
+    "version_number": "0.2.1",
     "website_url": "https://github.com/binbinmods/Bloodrager",
-    "description": "New Hero Mod for Gork, the Barbarian. A self-Bleeding, high Max HP damage dealer.",
+    "description": "New Hero Mod for Gork, the Greenskin. A self-Bleeding, high Max HP damage dealer.",
     "dependencies": [
         "meds-Obeliskial_Content-1.5.0"
     ]

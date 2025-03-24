@@ -87,14 +87,14 @@ namespace Barbarian
 
 
             else if (_trait == trait2b)
-            { // trait 2b:  At the start of your turn, reduce the cost of your highest cost card by 4.
+            { // trait 2b:  At the start of your turn, reduce the cost of your highest cost card by 3 until discarded.
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
                 if(IsLivingHero(_character))
                 {
                     CardData highestCostCard = GetRandomHighestCostCard(Enums.CardType.None, heroHand);
-                    ReduceCardCost(ref highestCostCard, _character, 4, isPermanent: false);
+                    ReduceCardCost(ref highestCostCard, _character, 3, isPermanent: false);
                 }                
             }
 
