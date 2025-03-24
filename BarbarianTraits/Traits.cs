@@ -174,7 +174,7 @@ namespace Barbarian
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
                     {
                         __result.AuraDamageType = Enums.DamageType.All;
-                        __result.AuraDamageIncreasedPercent = 2;
+                        __result.AuraDamageIncreasedPercentPerStack = 2;
                     }
 
                     enchantmentOfInterest = "barbariantrait1a";

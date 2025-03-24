@@ -1,3 +1,15 @@
+# 0.2.4
+
+Slasher gives damage instead of resists.
+
+# 0.2.3
+
+Tear no longer adds vanish.
+
+# 0.2.2
+
+Bleed now increases damage properly
+
 # 0.2.1
 
 Fixed issue with incorrect SubclassName causing issues
