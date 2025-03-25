@@ -210,19 +210,19 @@ namespace Barbarian
                         __result.CharacterStatModifiedValuePerStack *= 2;
                     }
                     string itemId = "barbarianslasher";
-                    if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId, AppliesTo.ThisHero)||
-                       IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"a", AppliesTo.ThisHero)||
-                       IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"b", AppliesTo.ThisHero)
+                    // if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId, AppliesTo.ThisHero)||
+                    //    IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"a", AppliesTo.ThisHero)||
+                    //    IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"b", AppliesTo.ThisHero)
+                    // )
+                    // {
+                    //     __result.AuraDamageType = Enums.DamageType.All;
+                    //     __result.AuraDamageIncreasedPerStack = 0.25f;
+                    // }
+                    if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"rare", AppliesTo.ThisHero)
                     )
                     {
                         __result.AuraDamageType = Enums.DamageType.All;
-                        __result.AuraDamageIncreasedPerStack = 0.25f;
-                    }
-                    else if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"rare", AppliesTo.ThisHero)
-                    )
-                    {
-                        __result.AuraDamageType = Enums.DamageType.All;
-                        __result.AuraDamageIncreasedPerStack = 1;
+                        __result.AuraDamageIncreasedPerStack = 0.5f;
                     }
 
                     break;
@@ -332,14 +332,15 @@ namespace Barbarian
             }
 
             enchantId = "barbarianslasher";
-            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b" )
+            // if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b" )
+            // {
+            //     string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.25 per stack\n";
+            //     stringBuilder1.Insert(0, textToAdd);
+            // }
+            // else 
+            if (__instance.Id == enchantId+"rare")
             {
-                string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.25 per stack\n";
-                stringBuilder1.Insert(0, textToAdd);
-            }
-            else if (__instance.Id == enchantId+"rare")
-            {
-                string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 1 per stack\n";
+                string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.5 per stack\n";
                 stringBuilder1.Insert(0, textToAdd);
             }
 

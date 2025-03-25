@@ -2,6 +2,14 @@
 
 Slasher gives damage instead of resists.
 
+Nerfed resists on Big! a little bit
+
+Fixed bug with Big! not reducing speed.
+
+Removed Vitality damage from base Slasher
+
+Nerfed Vit gain by Tear! by 1-2
+
 # 0.2.3
 
 Tear no longer adds vanish.
