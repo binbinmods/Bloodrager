@@ -1,3 +1,7 @@
+# 0.2.5
+
+Tear! now procs on all card types except for Enchantments.
+
 # 0.2.4
 
 Slasher gives damage instead of resists.

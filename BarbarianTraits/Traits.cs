@@ -425,6 +425,32 @@ namespace Barbarian
         {
             isCalculateDamageActive = false;
         }
+        public static bool firstCast = true;
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Item), nameof(Item.DoItem))]
+        public static bool DoItemPrefix(ref Character __instance,
+                                        ref bool __result,
+                                            Enums.EventActivation _theEvent,
+                                            CardData _cardData,
+                                            string _item,
+                                            Character _character,
+                                            Character _target,
+                                            int _auxInt,
+                                            string _auxString,
+                                            int order,
+                                            CardData castedCard,
+                                            bool onlyCheckItemActivation = false)
+        {
+            if((_item == "barbariantrait1b" || _item == "barbariantrait1ba" ||_item == "barbariantrait1bb" ) && castedCard.HasCardType(Enums.CardType.Enchantment) && firstCast)
+            {
+                __result = false;
+                firstCast = false;
+                return false;
+            }            
+            firstCast = true;
+            return true;
+        }
 
     }
 }
