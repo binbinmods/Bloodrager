@@ -1,6 +1,10 @@
+# 0.2.6
+
+Fixed Singularity Deck
+
 # 0.2.5
 
-Tear! now procs on all card types except for Enchantments.
+Tear! now procs on all card types. Might not work with Enchantments.
 
 # 0.2.4
 

@@ -66,5 +66,5 @@
     "Trait3B": "barbariantrait3a",
     "Trait4A": "barbariantrait4a",
     "Trait4B": "barbariantrait4b",
-    "CardsSingularity": "[\"barbarianchainsaw\", \"precisestrike\", \"faststrike\", \"bloodforblood\", \"recklesscharge\", \"intercept\", \"repairarmor\", \"barbarianrampart\", \"compassion\", \"bloodrain\", \"sweepingstrike\", \"cleave\", \"invigoratingblow\", \"maim\", \"bladestorm\"]"
+    "CardsSingularity": ["barbarianchainsaw", "precisestrike", "faststrike", "bloodforblood", "recklesscharge", "intercept", "repairarmor", "barbarianrampart", "compassion", "bloodrain", "sweepingstrike", "cleave", "invigoratingblow", "maim", "bladestorm"]
 }
