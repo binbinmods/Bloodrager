@@ -55,7 +55,7 @@ namespace Barbarian
             NPC[] teamNpc = MatchManager.Instance.GetTeamNPC();
 
             if (_trait == trait0)
-            { 
+            {
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
@@ -91,11 +91,11 @@ namespace Barbarian
                 string traitName = traitData.TraitName;
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
-                if(IsLivingHero(_character))
+                if (IsLivingHero(_character))
                 {
                     CardData highestCostCard = GetRandomHighestCostCard(Enums.CardType.None, heroHand);
                     ReduceCardCost(ref highestCostCard, _character, 3, isPermanent: false);
-                }                
+                }
             }
 
             else if (_trait == trait4a)
@@ -108,7 +108,7 @@ namespace Barbarian
                 LogDebug($"Handling Trait {traitId}: {traitName}");
                 if (IsLivingHero(_character) && _target.Alive && _target != null && _auxInt != 0 && _auxString == "vitality" && _target.SourceName != _character.SourceName)
                 {
-                    _character.SetAura(_character, GetAuraCurseData("vitality"), _auxInt, fromTrait:true, useCharacterMods: false);
+                    _character.SetAura(_character, GetAuraCurseData("vitality"), _auxInt, fromTrait: true, useCharacterMods: false);
                 }
 
             }
@@ -120,7 +120,7 @@ namespace Barbarian
                 LogDebug($"Handling Trait {traitId}: {traitName}");
                 // Bleed +1 for every 2 Sharp on you. -- Done in GetTraitAuraCurseModifiersPostfix
                 // +200 Max Bleed charges for everyone. -- Done in GACM
-                
+
             }
 
         }
@@ -174,7 +174,7 @@ namespace Barbarian
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
                     {
                         __result.AuraDamageType = Enums.DamageType.All;
-                        __result.AuraDamageIncreasedPercentPerStack = 2;
+                        __result.AuraDamageIncreasedPercentPerStack = 2.5f;
                     }
 
                     enchantmentOfInterest = "barbariantrait1a";
@@ -218,7 +218,7 @@ namespace Barbarian
                     //     __result.AuraDamageType = Enums.DamageType.All;
                     //     __result.AuraDamageIncreasedPerStack = 0.25f;
                     // }
-                    if(IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId+"rare", AppliesTo.ThisHero)
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Item, itemId + "rare", AppliesTo.ThisHero)
                     )
                     {
                         __result.AuraDamageType = Enums.DamageType.All;
@@ -232,7 +232,7 @@ namespace Barbarian
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
                     {
                         __result.AuraDamageIncreasedPercentPerStack *= 0.5f;
-                    }                    
+                    }
                     break;
                 case "sharp":
                     traitOfInterest = trait0;
@@ -241,7 +241,7 @@ namespace Barbarian
                         __result.AuraDamageIncreasedPerStack *= 0.5f;
                         __result.AuraDamageIncreasedPerStack2 *= 0.5f;
                         __result.AuraDamageIncreasedPerStack3 *= 0.5f;
-                        __result.AuraDamageIncreasedPerStack4 *= 0.5f;                        
+                        __result.AuraDamageIncreasedPerStack4 *= 0.5f;
                     }
                     break;
             }
@@ -257,13 +257,13 @@ namespace Barbarian
         {
             LogDebug("AssignTraitPostfix");
             string traitOfInterest = trait2a;
-            if(__result && traitName == traitOfInterest)
+            if (__result && traitName == traitOfInterest)
             {
                 LogDebug("AssignTraitPostfix - Doubling Max HP");
                 int toAdd = __instance.GetMaxHP();
                 __instance.ModifyMaxHP(toAdd);
             }
-           
+
         }
 
 
@@ -319,13 +319,13 @@ namespace Barbarian
             string currentDescription = Globals.Instance.CardsDescriptionNormalized[__instance.Id];
             stringBuilder1.Append(currentDescription);
             string enchantId = "barbariantrait1a";
-            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
+            if (__instance.Id == enchantId || __instance.Id == enchantId + "a" || __instance.Id == enchantId + "b")
             {
                 string textToAdd = $"{SpriteText("bleed")}  cannot be removed, prevented, or restricted in any way\n";
                 stringBuilder1.Insert(0, textToAdd);
             }
             enchantId = "barbariantrait3b";
-            if (__instance.Id == enchantId || __instance.Id == enchantId+"a" || __instance.Id == enchantId+"b")
+            if (__instance.Id == enchantId || __instance.Id == enchantId + "a" || __instance.Id == enchantId + "b")
             {
                 string textToAdd = $"{SpriteText("bleed")}  received +3\n";
                 stringBuilder1.Insert(0, textToAdd);
@@ -338,7 +338,7 @@ namespace Barbarian
             //     stringBuilder1.Insert(0, textToAdd);
             // }
             // else 
-            if (__instance.Id == enchantId+"rare")
+            if (__instance.Id == enchantId + "rare")
             {
                 string textToAdd = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.5 per stack\n";
                 stringBuilder1.Insert(0, textToAdd);
@@ -346,7 +346,7 @@ namespace Barbarian
 
 
             BinbinNormalizeDescription(ref __instance, stringBuilder1);
-        }   
+        }
 
 
         [HarmonyPrefix]
@@ -368,7 +368,7 @@ namespace Barbarian
             // string eventString = Enum.GetName(typeof(Enums.EventActivation), theEvent);
             // LogDebug("SetEventPrefix");
             string enchantId = "barbariantrait3b";
-            if (theEvent == Enums.EventActivation.AuraCurseSet && IsLivingHero(target) && CharacterHaveEnchantment(target,enchantId) && auxString == "bleed")
+            if (theEvent == Enums.EventActivation.AuraCurseSet && IsLivingHero(target) && CharacterHaveEnchantment(target, enchantId) && auxString == "bleed")
             {
                 // trait3a: Bleed Received +3";
                 int n = 3;
@@ -383,14 +383,14 @@ namespace Barbarian
 
             }
 
-        }             
+        }
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "HealAuraCurse")]
         public static bool HealAuraCursePrefix(ref Character __instance, AuraCurseData AC)
         {
             LogInfo($"HealAuraCursePrefix {subclassName}");
             string enchantId = "barbariantrait1a";
-            if(TeamHaveEnchantment(enchantId) && AC == GetAuraCurseData("bleed"))
+            if (TeamHaveEnchantment(enchantId) && AC == GetAuraCurseData("bleed"))
             {
                 return false;
             }
@@ -442,12 +442,12 @@ namespace Barbarian
                                             CardData castedCard,
                                             bool onlyCheckItemActivation = false)
         {
-            if((_item == "barbariantrait1b" || _item == "barbariantrait1ba" ||_item == "barbariantrait1bb" ) && castedCard.HasCardType(Enums.CardType.Enchantment) && firstCast)
+            if ((_item == "barbariantrait1b" || _item == "barbariantrait1ba" || _item == "barbariantrait1bb") && castedCard.HasCardType(Enums.CardType.Enchantment) && firstCast)
             {
                 __result = false;
                 firstCast = false;
                 return false;
-            }            
+            }
             firstCast = true;
             return true;
         }

@@ -1,3 +1,7 @@
+# 0.2.7
+
+Buffed damage from Saw! from 2%/Bleed to 2.5%/Bleed
+
 # 0.2.6
 
 Fixed Singularity Deck
