@@ -1,6 +1,18 @@
+# 0.2.8
+
+Added Squiggly
+
+Innate now halves bless too.
+
+Text on custom cards should now properly display in combat.
+
+Blue and Yellow Saws can now be used in Decks
+
 # 0.2.7
 
 Buffed damage from Saw! from 2%/Bleed to 2.5%/Bleed
+
+Rip! should now prevent Vitality from dispelling Bleed.
 
 # 0.2.6
 

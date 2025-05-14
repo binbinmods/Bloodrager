@@ -60,8 +60,8 @@ namespace Barbarian
                 string traitId = _trait;
                 LogDebug($"Handling Trait {traitId}: {traitName}");
                 // trait0:
-                // Fury and Sharp are half as effective at increasing your damage. 
-                // Bleed on you increases damage by 3%/charge 
+                // Bless, Fury, and Sharp are half as effective at increasing your damage. 
+                // Bleed on you increases damage by 2.5%/charge 
                 // Done in GACM
             }
 
@@ -162,7 +162,7 @@ namespace Barbarian
                 // corrupted - +1 damage/stack vitality
 
                 // trait0:
-                // Fury and Sharp are half as effective at increasing your damage. 
+                // Bless, Fury and Sharp are half as effective at increasing your damage. 
                 // Bleed on you increases damage by 2%/charge 
 
                 // enchantment1a: Bleed cannot be removed, prevented, or restricted
@@ -224,6 +224,13 @@ namespace Barbarian
                         __result.AuraDamageType = Enums.DamageType.All;
                         __result.AuraDamageIncreasedPerStack = 0.5f;
                     }
+                    enchantmentOfInterest = "barbariantrait1a";
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Enchantment, enchantmentOfInterest, AppliesTo.ThisHero)
+                    )
+                    {
+                        __result.RemoveAuraCurse = (AuraCurseData)null;
+                        // __result.RemoveAuraCurse2 = null;
+                    }
 
                     break;
 
@@ -235,6 +242,16 @@ namespace Barbarian
                     }
                     break;
                 case "sharp":
+                    traitOfInterest = trait0;
+                    if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
+                    {
+                        __result.AuraDamageIncreasedPerStack *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack2 *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack3 *= 0.5f;
+                        __result.AuraDamageIncreasedPerStack4 *= 0.5f;
+                    }
+                    break;
+                case "bless":
                     traitOfInterest = trait0;
                     if (IfCharacterHas(characterOfInterest, CharacterHas.Trait, traitOfInterest, AppliesTo.ThisHero))
                     {

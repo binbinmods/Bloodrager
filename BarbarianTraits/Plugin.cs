@@ -7,6 +7,7 @@ using System.IO;
 using UnityEngine;
 using System;
 using static Barbarian.Traits;
+using static Barbarian.DescriptionFunctions;
 using BepInEx.Configuration;
 
 namespace Barbarian
@@ -46,11 +47,29 @@ namespace Barbarian
                 _description: "Gork, the Barbarian.",
                 _version: PluginInfo.PLUGIN_VERSION,
                 _date: ModDate,
-                _link: @"https://github.com/binbinmods/heronamesubclass",
+                _link: @"https://github.com/binbinmods/Bloodrager",
                 _contentFolder: "Barbarian",
                 _type: ["content", "hero", "trait"]
             );
-            // apply patches
+
+            string text = ""; // $"{SpriteText("vitality")}  on this hero increases All Damage by 0.25 per stack\n";
+            string cardId = "barbarianslasher";
+            // CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId);
+            text = $"{SpriteText("vitality")}  on this hero increases All Damage by 0.5 per stack\n";
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId + "rare");
+
+            cardId = "barbariantrait1a";
+            text = $"{SpriteText("bleed")}  cannot be removed, prevented, or restricted in any way\n";
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId);
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId + "a");
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId + "b");
+
+            cardId = "barbariantrait3b";
+            text = $"{SpriteText("bleed")} received +3\n";
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId);
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId + "a");
+            CardDescriptionNew.AddTextToCardDescription(text, CardDescriptionNew.TextLocation.Beginning, cardId + "b");
+
 
 
             harmony.PatchAll();
@@ -62,7 +81,7 @@ namespace Barbarian
             {
                 Log.LogDebug(debugBase + msg);
             }
-            
+
         }
         internal static void LogInfo(string msg)
         {
