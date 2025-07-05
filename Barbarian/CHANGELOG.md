@@ -1,3 +1,7 @@
+# 0.2.9
+
+Reduced starting number of Blood for Bloods
+
 # 0.2.8
 
 Added Squiggly

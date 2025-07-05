@@ -4,9 +4,9 @@
     "Cards": [
         "{\n    \"UnitsInDeck\": 3,\n    \"Card\": \"bloodrain\"\n}",
         "{\n    \"UnitsInDeck\": 3,\n    \"Card\": \"recklesscharge\"\n}",
-        "{\n    \"UnitsInDeck\": 3,\n    \"Card\": \"bloodforblood\"\n}",
+        "{\n    \"UnitsInDeck\": 2,\n    \"Card\": \"bloodforblood\"\n}",
         "{\n    \"UnitsInDeck\": 2,\n    \"Card\": \"invigoratingblow\"\n}",
-        "{\n    \"UnitsInDeck\": 2,\n    \"Card\": \"barbarianrampart\"\n}",
+        "{\n    \"UnitsInDeck\": 3,\n    \"Card\": \"barbarianrampart\"\n}",
         "{\n    \"UnitsInDeck\": 1,\n    \"Card\": \"demolishingblow\"\n}",
         "{\n    \"UnitsInDeck\": 1,\n    \"Card\": \"barbarianchainsaw\"\n}"
     ],
